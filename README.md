@@ -2,6 +2,8 @@
 
 This is an extension of my other project ["Bootstrap script for the Windows Subsystem for Linux (WSL)"][ubuntu-win-bootstrap]
 
+__PLEASE NOTE this script is not yet fully converted from the original WSL version so will not work properly on the PI yet.__
+
 This will be a set of scripts to provision a newly installed 'Headless' (No monitor or keyboard) Raspberry PI with the following functionality :
 
 * Remove the default `pi` user, and create a new user of your own with a password and sudo rights. This new user will then be used to install the local scripting languages etc.
