@@ -1,9 +1,10 @@
 # Raspberry PI bootstrap script
 
-This is an extension of my other project ["Bootstrap script for the Windows Subsytem for Linux (WSL)"][ubuntu-win-bootstrap]
+This is an extension of my other project ["Bootstrap script for the Windows Subsystem for Linux (WSL)"][ubuntu-win-bootstrap]
 
-This will be a set of scripts to provision a newly installed 'Headless' Raspberry PI with the following functionality :
+This will be a set of scripts to provision a newly installed 'Headless' (No monitor or keyboard) Raspberry PI with the following functionality :
 
+* Remove the default `pi` user, and create a new user of your own with a password and sudo rights. This new user will then be used to install the local scripting languages etc.
 * Updated to the latest package versions from Ubuntu upstream.
 * Have the `build-essential` package installed plus all required support libraries to enable the below functionality to work.
 * [`Sublime Text 3`][sublime] Editor installed as standard with `Package Control` and a number of useful packages.
@@ -15,8 +16,9 @@ This will be a set of scripts to provision a newly installed 'Headless' Raspberr
 * Enable resolution of WINS hostnames
 * Install `GEdit` (Text editor) and `pcmanfm` (file manager). These are X-Window applications so you will need an x-server installed on your local computer
 
-As a prerequisite, the PI to be provisioned should be running the [`Raspbian`][raspbian] Operating system, preferably the 'lite' version though the  full desktop version will work also.  
-You will need to be able to connect to the PI over SSH since we are running Headless, so it will need to be plugged into a wired Ethernet connection that you can access. SSH needs to be enabled on your PI since this is disabled out of the box. See [this link][https://www.raspberrypi.org/documentation/remote-access/ssh/] for instructions (Section number 3).
+As a prerequisite, the PI to be provisioned should be running the [`Raspbian`][raspbian] Operating system, preferably the 'lite' version though the  full desktop version will work also.
+
+You will need to be able to connect to the PI over SSH since we are running Headless, so it will need to be plugged into a wired Ethernet connection that you can access. SSH needs to be enabled on your PI since this is now disabled out of the box. See section three on [this link][pi-ssh] for instructions on how to do this.
 
 **Please read all of this file before starting**
 
@@ -109,5 +111,6 @@ $ pcmanfm
 [perl]: https://www.perl.org/
 [perlbrew]: https://perlbrew.pl/
 [vcxsrv]: https://sourceforge.net/projects/vcxsrv/
-[ubuntu-win-bootstrap]: https://github.com/seapagan/ubuntu-win-bootstrap'
+[ubuntu-win-bootstrap]: https://github.com/seapagan/ubuntu-win-bootstrap
 [raspbian]: https://www.raspberrypi.org/downloads/raspbian/
+[pi-ssh]: https://www.raspberrypi.org/documentation/remote-access/ssh/
