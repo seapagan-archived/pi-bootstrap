@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# these will run as the default non-privileged user.
+# this script will run as the default non-privileged user, so the 'sudo' password
+# will be requested at the start.
 
 # save the path to this script for later use
 THISPATH="$(dirname $(readlink -f "$0"))"
@@ -11,8 +12,6 @@ echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sou
 sudo apt update
 sudo apt -y full-upgrade
 
-# make sure we have the required libraries and tools already installed before starting.
-sudo apt install -y build-essential libssl-dev libreadline-dev zlib1g-dev sqlite3 libsqlite3-dev libgtk2.0-0 libbz2-dev sublime-text libxml2-dev libdb-dev gedit pcmanfm
 
 # install winbind and support lib to ping WINS hosts
 sudo apt install -y winbind libnss-winbind
@@ -21,7 +20,10 @@ if ! grep -qc 'wins' /etc/nsswitch.conf ; then
   sudo sed -i '/hosts:/ s/$/ wins/' /etc/nsswitch.conf
 fi
 
-# set the DISPLAY variable to point to the XServer running on our Windows PC
+# install a large set of libraries, dev headers and programs that will be needed by other installs.
+sudo apt install -y build-essential libssl-dev libreadline-dev zlib1g-dev sqlite3 libsqlite3-dev libgtk2.0-0 libbz2-dev sublime-text libxml2-dev libdb-dev gedit pcmanfm
+
+# set the DISPLAY variable to point to the XServer running on our Local PC
 echo >> ~/.bashrc
 echo "export DISPLAY=:0" >> ~/.bashrc
 
@@ -67,7 +69,7 @@ rm ~/.rbenv/versions/2.4.1/bin/ri
 gem update --system
 gem update
 
-# now install nvm, the latest LTS version of Node and the latest actual verision of Node..
+# now install nvm, the latest LTS version of Node and the latest actual version of Node..
 echo "## Setting up NVM (Node Version Manager) ##"
 echo >> ~/.bashrc
 echo "# Set up NVM" >> ~/.bashrc
@@ -117,10 +119,10 @@ perlbrew install-cpanm
 (echo o conf prerequisites_policy follow; echo o conf build_requires_install_policy yes) | cpan
 (echo o conf colorize_output yes; echo o conf colorize_print bold white on_black; echo o conf colorize_warn bold red on_black; echo o conf colorize_debug green on_black) | cpan
 # now install useful modules for CPAN...
-cpanm Term::ReadLine::Perl --notest # we install this separately and with no tests so it will not timeout on unattended installs. Ohterwise may timeout and crash the script.
+cpanm Term::ReadLine::Perl --notest # we install this separately and with no tests so it will not timeout on unattended installs. Otherwise may timeout and crash the script.
 cpanm CPAN Term::ReadKey YAML YAML::XS LWP CPAN::SQLite App::cpanoutdated Log::Log4perl XML::LibXML Text::Glob
 # Upgrade any modules that need it...
-cpanm Net::Ping --force # this fails tests on WSL so must be forced
+cpanm Net::Ping --force # confirm if this still needs forced!
 cpan-outdated -p | cpanm
 
 # copy a basic .gitconfig if we have it...
@@ -140,8 +142,8 @@ cp $THISPATH/support/Package\ Control.sublime-settings ~/.config/sublime-text-3/
 if [ -f "$THISPATH/support/License.sublime_license" ] ; then
   cp $THISPATH/support/License.sublime_license ~/.config/sublime-text-3/Local
 fi
-# it would also be very useful to pre-configure some Subl default settings at this time
+# it would also be very useful to pre-configure some Sublime Text default settings at this time
 # TODO
 
 echo
-echo "You now need to close and restart the Bash shell"
+echo "Now would be a good time to reboot your PI!"
