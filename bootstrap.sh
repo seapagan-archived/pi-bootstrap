@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 # this script will run as the default non-privileged user, so the 'sudo' password
 # will be requested at the start.
+#
+# Currently script must be cloned to and run on the local PI, remote access will come later.
 
 # save the path to this script for later use
 THISPATH="$(dirname $(readlink -f "$0"))"
 echo "We are running from : $THISPATH"
 
-# ensure we have the latest packages, including sublime text repos
-wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+# remove the motd if exists, it annoys me!
+if [ -f "/etc/motd" ] ; then
+  sudo rm /etc/motd
+fi
+
+# ensure we have the latest packages
 sudo apt update
 sudo apt -y full-upgrade
-
 
 # install winbind and support lib to ping WINS hosts
 sudo apt install -y winbind libnss-winbind
@@ -21,7 +25,9 @@ if ! grep -qc 'wins' /etc/nsswitch.conf ; then
 fi
 
 # install a large set of libraries, dev headers and programs that will be needed by other installs.
-sudo apt install -y build-essential libssl-dev libreadline-dev zlib1g-dev sqlite3 libsqlite3-dev libgtk2.0-0 libbz2-dev sublime-text libxml2-dev libdb-dev gedit pcmanfm
+sudo apt install -y build-essential libssl-dev libreadline-dev zlib1g-dev sqlite3 libsqlite3-dev libgtk2.0-0 libbz2-dev libxml2-dev libdb-dev gedit pcmanfm \
+  libgdbm-dev tcl-dev tk-dev libtcl8.6 libtk8.6  libffi-dev libpcre3-dev mcrypt bison mercurial subversion subversion-tools gfortran liblzma-dev zip xorg-dev \
+  software-properties-common gettext htop libcurl4-openssl-dev
 
 # set the DISPLAY variable to point to the XServer running on our Local PC
 echo >> ~/.bashrc
@@ -129,21 +135,6 @@ cpan-outdated -p | cpanm
 if [ -f "$THISPATH/support/.gitconfig" ] ; then
   cp $THISPATH/support/.gitconfig ~/.gitconfig
 fi
-
-# set up Sublime Text with Package control and a useful selection of default packages.
-# You can edit the list of pre-installed packages in the file `./support/Package\ Control.sublime-settings`
-# These packages will be installed when subl is first run
-mkdir -p ~/.config/sublime-text-3/Installed\ Packages
-mkdir -p ~/.config/sublime-text-3/Packages/User
-mkdir -p ~/.config/sublime-text-3/Local
-curl -o ~/.config/sublime-text-3/Installed\ Packages/Package\ Control.sublime-package https://packagecontrol.io/Package%20Control.sublime-package
-cp $THISPATH/support/Package\ Control.sublime-settings ~/.config/sublime-text-3/Packages/User
-# install the sublime license if it is found...
-if [ -f "$THISPATH/support/License.sublime_license" ] ; then
-  cp $THISPATH/support/License.sublime_license ~/.config/sublime-text-3/Local
-fi
-# it would also be very useful to pre-configure some Sublime Text default settings at this time
-# TODO
 
 echo
 echo "Now would be a good time to reboot your PI!"

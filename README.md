@@ -6,10 +6,9 @@ __PLEASE NOTE this script is not yet fully converted from the original WSL versi
 
 This will be a set of scripts to provision a newly installed 'Headless' (No monitor or keyboard) Raspberry PI with the following functionality :
 
-* Remove the default `pi` user, and create a new user of your own with a password and sudo rights. This new user will then be used to install the local scripting languages etc.
+* Remove the default `pi` user, and create a new user with a password and sudo rights. This new user will then be used to install the local scripting languages etc.
 * Updated to the latest package versions from Ubuntu upstream.
 * Have the `build-essential` package installed plus all required support libraries to enable the below functionality to work.
-* [`Sublime Text 3`][sublime] Editor installed as standard with `Package Control` and a number of useful packages.
 * The Latest version of [`Git`][git] installed. A skeleton `.gitconfig` will be set up with a few aliases.
 * The [`Ruby`][ruby] scripting language installed via [`Rbenv`][rbenv] with the current version of Rails installed as standard along with several other common gems.
 * [`Node.js`][node] both the most recent LTS version and latest stable version via [`NVM`][nvm]. The LTS version is activated by default.
@@ -40,41 +39,8 @@ To be updated
 ```
 
 ## X-Server
-To use the included version of `Sublime Text` or any other X-Windows programs we need to have an X-Server installed on whichever system, you are SSH'ing in from. Under Windows, I'd recommend installing [`VcXsrv`][vcxsrv]. This is a straightforward install and then run the `XLaunch` utility leaving everything at the default settings. We already set the `DISPLAY` environment variable to point to this as part of the bootstrap.  
+To use any X-Windows programs we need to have an X-Server installed on whichever local system you are SSH'ing in from. Under Windows, I'd recommend installing [`VcXsrv`][vcxsrv]. This is a straightforward install and then run the `XLaunch` utility leaving everything at the default settings. We already set the `DISPLAY` environment variable to point to this as part of the bootstrap.  
 Once that is installed and running you will be able to use any other X-Window based programs you wish to install - it is even possible to have the full UBUNTU graphical desktop running if that is your desire.
-
-## Sublime Text 3
-The bootstrap script will automatically install Sublime Text 3 with `Package Control` and a number of useful packages. These will properly be installed during the first and second times Sublime Text is opened. I recommend you run Sublime the first time,  wait a few seconds them close (this installs the `Package control` plug-in). Open it a second time and the rest of the packages will be installed. It may take a few minutes for the packages to install depending on your Internet speed so try not to close the program too soon.
-
-#### Running sublime Text
-```bash
-$ subl
-```
-
-#### Packages installed are :
-* All Autocomplete
-* Babel
-* Color Highlighter
-* DocBlockr
-* Emmet
-* ExportHtml
-* Git
-* GitGutter
-* HexViewer
-* Markdown Preview
-* MarkdownEditing
-* Package Control
-* SassBeautify
-* SideBarEnhancements
-* SublimeCodeIntel
-* SublimeLinter
-* SublimeREPL
-* Terminal
-* TrailingSpaces
-
-The list of packages that are installed can be changed or added to by editing the  [Package Control.sublime-settings](support/Package%20Control.sublime-settings)
-
-If you have a License for Sublime Text, copy that from your email into a file `support/License.sublime_license` before running the Bootstrap script, and it wil be properly installed to Sublime for you.
 
 ## Other Utilities
 There are several other useful utilities installed, and the list is growing.
