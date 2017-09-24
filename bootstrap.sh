@@ -27,6 +27,16 @@ if ! grep -qc 'wins' /etc/nsswitch.conf ; then
   sudo sed -i '/hosts:/ s/$/ wins/' /etc/nsswitch.conf
 fi
 
+# install Git from source since the version in PI repo is usually behind ...
+cd $HOME
+wget https://www.kernel.org/pub/software/scm/git/git-2.14.1.tar.xz
+tar -xvf git-2.14.1.tar.xz
+cd git-2.14.1
+./configure --prefix=/usr --with-gitconfig=/etc/gitconfig
+make
+sudo make install
+cd $THISPATH
+
 # set the DISPLAY variable to point to the XServer running on our Local PC
 echo >> ~/.bashrc
 echo "export DISPLAY=:0" >> ~/.bashrc
@@ -57,6 +67,8 @@ git clone https://github.com/nicknovitski/rbenv-gem-update ~/.rbenv/plugins/rben
 git clone https://github.com/rkh/rbenv-update.git ~/.rbenv/plugins/rbenv-update
 git clone https://github.com/toy/rbenv-update-rubies.git ~/.rbenv/plugins/rbenv-update-rubies
 git clone https://github.com/rkh/rbenv-whatis.git ~/.rbenv/plugins/rbenv-whatis
+git clone https://github.com/yyuu/rbenv-ccache.git ~/.rbenv/plugins/rbenv-ccache
+
 # set up a default-gems file for gems to install with each ruby...
 echo $'bundler\nsass\nscss_lint\nrails\nrspec\nrspec-rails' > ~/.rbenv/default-gems
 # set up .gemrc to avoid installing documentation for each gem...
@@ -80,8 +92,12 @@ echo "# Set up NVM" >> ~/.bashrc
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 nvm install --lts
 nvm install node
+# switch to the LTS version as default
+nvm use --lts
 
 # next install python (both 2.x and 3.x trees) using Pyenv
 curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
@@ -117,8 +133,9 @@ if ! grep -qc '~/perl5/perlbrew/etc/bashrc' ~/.bashrc ; then
 fi
 # source perlbrew setup so we can use in this shell
 source ~/perl5/perlbrew/etc/bashrc
-perlbrew install perl-5.27.4
-perlbrew switch perl-5.27.4
+# latest Perl version on Perlbrew seems to have install problems on PI, to investigate.
+perlbrew install perl-5.26.1
+perlbrew switch perl-5.26.1
 perlbrew install-cpanm
 # set up some cpan configuration
 (echo y; echo o conf auto_commit 1; echo o conf yaml_module YAML::XS; echo o conf use_sqlite yes; echo o conf commit) | cpan
@@ -126,9 +143,8 @@ perlbrew install-cpanm
 (echo o conf colorize_output yes; echo o conf colorize_print bold white on_black; echo o conf colorize_warn bold red on_black; echo o conf colorize_debug green on_black) | cpan
 # now install useful modules for CPAN...
 cpanm Term::ReadLine::Perl --notest # we install this separately and with no tests so it will not timeout on unattended installs. Otherwise may timeout and crash the script.
-cpanm CPAN Term::ReadKey YAML YAML::XS LWP CPAN::SQLite App::cpanoutdated Log::Log4perl XML::LibXML Text::Glob
+cpanm CPAN Term::ReadKey YAML YAML::XS LWP CPAN::SQLite App::cpanoutdated Log::Log4perl XML::LibXML Text::Glob Net::Ping
 # Upgrade any modules that need it...
-cpanm Net::Ping --force # confirm if this still needs forced!
 cpan-outdated -p | cpanm
 
 # copy a basic .gitconfig if we have it...

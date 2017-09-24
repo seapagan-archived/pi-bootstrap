@@ -19,12 +19,14 @@ This will be a set of scripts to provision a newly installed 'Headless' (No moni
 
 As a prerequisite, the PI to be provisioned should be running the [`Raspbian`][raspbian] Operating system, preferably the 'lite' version though the  full desktop version will work also.
 
+The PI will need Internet access during the provisioning period.
+
 You will need to be able to connect to the PI over SSH since we are running Headless, so it will need to be plugged into a wired Ethernet connection that you can access. SSH needs to be enabled on your PI since this is now disabled out of the box. See section three on [this link][pi-ssh] for instructions on how to do this.
 
 **Please read all of this file before starting**
 
 ## Usage
-The script is designed to be run either locally on the PI, or on a remote machine over SSH.
+The script is designed to be run locally on the PI. Future updates will be able to be run from a remote machine over SSH.
 
 ### Prepare the Raspberry PI
 
