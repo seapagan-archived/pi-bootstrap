@@ -17,17 +17,15 @@ fi
 sudo apt update
 sudo apt -y full-upgrade
 
-# install winbind and support lib to ping WINS hosts
-sudo apt install -y winbind libnss-winbind
-# need to append to the /etc/nsswitch.conf file to enable if not already done ...
-if ! grep -qc 'wins' /etc/nsswitch.conf ; then
-  sudo sed -i '/hosts:/ s/$/ wins/' /etc/nsswitch.conf
-fi
-
 # install a large set of libraries, dev headers and programs that will be needed by other installs.
 sudo apt install -y build-essential libssl-dev libreadline-dev zlib1g-dev sqlite3 libsqlite3-dev libgtk2.0-0 libbz2-dev libxml2-dev libdb-dev gedit pcmanfm \
   libgdbm-dev tcl-dev tk-dev libtcl8.6 libtk8.6  libffi-dev libpcre3-dev mcrypt bison mercurial subversion subversion-tools gfortran liblzma-dev zip xorg-dev \
-  software-properties-common gettext htop libcurl4-openssl-dev
+  software-properties-common gettext htop libcurl4-openssl-dev winbind libnss-winbind ccache
+
+# need to append to the /etc/nsswitch.conf file to enable winbind if not already done ...
+if ! grep -qc 'wins' /etc/nsswitch.conf ; then
+  sudo sed -i '/hosts:/ s/$/ wins/' /etc/nsswitch.conf
+fi
 
 # set the DISPLAY variable to point to the XServer running on our Local PC
 echo >> ~/.bashrc
@@ -49,7 +47,7 @@ fi
 # run the above command locally so we can get rbenv to work on this provisioning shell
 eval "$(rbenv init -)"
 # install a set of useful plugins for rbenv...
-mkdir -p /home/seapagan/.rbenv/plugins
+mkdir -p ~/.rbenv/plugins
 git clone https://github.com/ianheggie/rbenv-binstubs.git ~/.rbenv/plugins/rbenv-binstubs
 git clone https://github.com/sstephenson/rbenv-default-gems.git ~/.rbenv/plugins/rbenv-default-gems
 git clone https://github.com/rbenv/rbenv-each.git ~/.rbenv/plugins/rbenv-each
@@ -64,13 +62,13 @@ echo $'bundler\nsass\nscss_lint\nrails\nrspec\nrspec-rails' > ~/.rbenv/default-g
 # set up .gemrc to avoid installing documentation for each gem...
 echo "gem: --no-document" > ~/.gemrc
 # install the required ruby version and set as default
-rbenv install 2.4.1
-rbenv global 2.4.1
+rbenv install 2.4.2
+rbenv global 2.4.2
 
 # we need to erase 2 files temporarily (they will be regenerated) otherwise the installation will pause for overwrite confirmation
 # These are the 'ri' and 'rdoc' scripts
-rm ~/.rbenv/versions/2.4.1/bin/rdoc
-rm ~/.rbenv/versions/2.4.1/bin/ri
+rm ~/.rbenv/versions/2.4.2/bin/rdoc
+rm ~/.rbenv/versions/2.4.2/bin/ri
 # now update RubyGems and the default gems
 gem update --system
 gem update
@@ -79,7 +77,7 @@ gem update
 echo "## Setting up NVM (Node Version Manager) ##"
 echo >> ~/.bashrc
 echo "# Set up NVM" >> ~/.bashrc
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 nvm install --lts
@@ -87,6 +85,9 @@ nvm install node
 
 # next install python (both 2.x and 3.x trees) using Pyenv
 curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+# install a couple of plugins...
+git clone git://github.com/yyuu/pyenv-pip-migrate.git ~/.pyenv/plugins/pyenv-pip-migrate
+git clone https://github.com/yyuu/pyenv-ccache.git $(pyenv root)/plugins/pyenv-ccache
 
 if ! grep -qc 'pyenv init' ~/.bashrc ; then
   echo "## Adding pyenv to .bashrc ##"
@@ -101,10 +102,10 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-pyenv install 2.7.13
-pyenv install 3.6.1
-# 'python' and 'python2.7' target 2.7.13 while 'python3.6' targets 3.6.1
-pyenv global 2.7.13 3.6.1
+pyenv install 2.7.14
+pyenv install 3.6.2
+# set so 'python' and 'python2' target 2.7.14 while 'python3' targets 3.6.2
+pyenv global 2.7.14 3.6.2
 
 # now to install Perl using Perlbrew...
 \curl -L https://install.perlbrew.pl | bash
@@ -116,9 +117,8 @@ if ! grep -qc '~/perl5/perlbrew/etc/bashrc' ~/.bashrc ; then
 fi
 # source perlbrew setup so we can use in this shell
 source ~/perl5/perlbrew/etc/bashrc
-# Currently the tests will fail under WSL so we dont run them. Needs further investigation.
-perlbrew install perl-5.27.1 --notest
-perlbrew switch perl-5.27.1
+perlbrew install perl-5.27.4
+perlbrew switch perl-5.27.4
 perlbrew install-cpanm
 # set up some cpan configuration
 (echo y; echo o conf auto_commit 1; echo o conf yaml_module YAML::XS; echo o conf use_sqlite yes; echo o conf commit) | cpan
