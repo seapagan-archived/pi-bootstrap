@@ -29,8 +29,8 @@ fi
 
 # install Git from source since the version in PI repo is usually behind ...
 cd $HOME
-wget https://www.kernel.org/pub/software/scm/git/git-2.14.1.tar.xz
-tar -xvf git-2.14.1.tar.xz
+wget https://www.kernel.org/pub/software/scm/git/git-2.18.0.tar.xz
+tar -xvf git-2.18.0.tar.xz
 cd git-2.14.1
 ./configure --prefix=/usr --with-gitconfig=/etc/gitconfig
 make
@@ -74,8 +74,8 @@ echo $'bundler\nsass\nscss_lint\nrails\nrspec\nrspec-rails' > ~/.rbenv/default-g
 # set up .gemrc to avoid installing documentation for each gem...
 echo "gem: --no-document" > ~/.gemrc
 # install the required ruby version and set as default
-rbenv install 2.4.2
-rbenv global 2.4.2
+rbenv install 2.5.1
+rbenv global 2.5.1
 
 # we need to erase 2 files temporarily (they will be regenerated) otherwise the installation will pause for overwrite confirmation
 # These are the 'ri' and 'rdoc' scripts
@@ -118,10 +118,10 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-pyenv install 2.7.14
-pyenv install 3.6.2
-# set so 'python' and 'python2' target 2.7.14 while 'python3' targets 3.6.2
-pyenv global 2.7.14 3.6.2
+pyenv install 2.7.15
+pyenv install 3.7.0
+# set so 'python' and 'python2' target 2.7.15 while 'python3' targets 3.7.0
+pyenv global 2.7.15 3.7.0
 
 # now to install Perl using Perlbrew...
 \curl -L https://install.perlbrew.pl | bash
@@ -134,8 +134,8 @@ fi
 # source perlbrew setup so we can use in this shell
 source ~/perl5/perlbrew/etc/bashrc
 # latest Perl version on Perlbrew seems to have install problems on PI, to investigate.
-perlbrew install perl-5.26.1
-perlbrew switch perl-5.26.1
+perlbrew install perl-5.29.2
+perlbrew switch perl-5.29.2
 perlbrew install-cpanm
 # set up some cpan configuration
 (echo y; echo o conf auto_commit 1; echo o conf yaml_module YAML::XS; echo o conf use_sqlite yes; echo o conf commit) | cpan
