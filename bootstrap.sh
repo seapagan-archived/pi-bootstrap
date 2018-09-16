@@ -30,8 +30,8 @@ fi
 # install Git from source since the version in PI repo is usually behind ...
 cd $HOME
 wget https://www.kernel.org/pub/software/scm/git/git-2.18.0.tar.xz
-tar -xvf git-2.18.0.tar.xz
-cd git-2.14.1
+tar -xvf git-2.19.0.tar.xz
+cd git-2.19.0
 ./configure --prefix=/usr --with-gitconfig=/etc/gitconfig
 make
 sudo make install
