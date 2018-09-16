@@ -20,7 +20,7 @@ sudo apt -y full-upgrade
 # install a large set of libraries, dev headers and programs that will be needed by other installs.
 sudo apt install -y build-essential libssl-dev libreadline-dev zlib1g-dev sqlite3 libsqlite3-dev libgtk2.0-0 libbz2-dev libxml2-dev libdb-dev gedit pcmanfm \
   libgdbm-dev tcl-dev tk-dev libtcl8.6 libtk8.6  libffi-dev libpcre3-dev mcrypt bison mercurial subversion subversion-tools gfortran liblzma-dev zip xorg-dev \
-  software-properties-common gettext htop libcurl4-openssl-dev winbind libnss-winbind ccache
+  software-properties-common gettext htop libcurl4-openssl-dev winbind libnss-winbind ccache libffi-dev
 
 # need to append to the /etc/nsswitch.conf file to enable winbind if not already done ...
 if ! grep -qc 'wins' /etc/nsswitch.conf ; then
@@ -29,9 +29,9 @@ fi
 
 # install Git from source since the version in PI repo is usually behind ...
 cd $HOME
-wget https://www.kernel.org/pub/software/scm/git/git-2.18.0.tar.xz
-tar -xvf git-2.18.0.tar.xz
-cd git-2.14.1
+wget https://www.kernel.org/pub/software/scm/git/git-2.19.0.tar.xz
+tar -xvf git-2.19.0.tar.xz
+cd git-2.19.0
 ./configure --prefix=/usr --with-gitconfig=/etc/gitconfig
 make
 sudo make install
