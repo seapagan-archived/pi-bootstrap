@@ -1,5 +1,9 @@
 # Raspberry PI bootstrap script
 
+## This script is currently UNMAINTAINED
+
+I'll be updating my [linux-comfy-chair][lcc] project to support the PI and therefore make this repository obsolete. Kept for hostorical reasons.
+
 This is an extension of my other project ["Bootstrap script for the Windows Subsystem for Linux (WSL)"][ubuntu-win-bootstrap]
 
 __PLEASE NOTE this script is not yet fully converted from the original WSL version so will not work properly on the PI yet.__
@@ -84,3 +88,4 @@ $ pcmanfm
 [ubuntu-win-bootstrap]: https://github.com/seapagan/ubuntu-win-bootstrap
 [raspbian]: https://www.raspberrypi.org/downloads/raspbian/
 [pi-ssh]: https://www.raspberrypi.org/documentation/remote-access/ssh/
+[lcc]: https://github.com/seapagan/linux-comfy-chair
